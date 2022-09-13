@@ -22,7 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Post findByChatRoomId(Long chatRoomId);
 
-
     @Query(value = "SELECT * FROM Post WHERE id < :lastId AND address LIKE :address% AND (menu LIKE %:keyword% OR title LIKE %:keyword% OR contents LIKE %:keyword% )",
             nativeQuery = true)
     Page<Post> selectPost(@Param("lastId") Long lastId,
