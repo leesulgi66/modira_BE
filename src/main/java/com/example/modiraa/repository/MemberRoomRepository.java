@@ -15,12 +15,13 @@ import java.util.Optional;
 
 public interface MemberRoomRepository extends JpaRepository<MemberRoom, Long> {
 
-   // 내가 참석한 모임 조회
-    @Query("SELECT NEW com.example.modiraa.dto.EnterPostsResponseDto(p.id, p.title, PI.imageurl, p.menu)" +
-    "from MemberRoom M left outer join Post p on M.chatRoom = p.chatRoom left  outer join  PostImage  PI on PI.menu = p.menu " +
-    "where M.member =:member"+
-    " order by p.id desc")
-    List<EnterPostsResponseDto> MyJoinRead(@Param("member")Member member, Pageable pageable);
+
+ // 내가 참석한 모임 조회
+ @Query("SELECT NEW com.example.modiraa.dto.EnterPostsResponseDto(p.id, p.title, PI.imageurl, p.menu)" +
+         "from MemberRoom M left outer join Post p on M.chatRoom = p.chatRoom left  outer join  PostImage  PI on PI.menu = p.menu " +
+         "where M.member =:member and p.member <> :member "+
+         " order by p.id desc")
+ List<EnterPostsResponseDto> MyJoinRead(@Param("member")Member member, Pageable pageable);
 
     // 유저 리스트 정보 불러오기
     @Query("SELECT NEW com.example.modiraa.dto.JoinUserListResponseDto(m.id, m.nickname, m.profileImage)" +
