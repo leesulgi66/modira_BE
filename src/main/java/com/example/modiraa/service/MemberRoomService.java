@@ -38,9 +38,6 @@ public class MemberRoomService {
         Member member = userDetails.getMember();
         Optional<ChatRoom> chatroom = chatRoomRepository.findByRoomId(roomId);
         Optional<MemberRoom> memberRoom1 = memberRoomRepository.findByChatRoomAndMember(chatroom,member);
-        if (chatroom.isEmpty()){
-            throw new CustomException(ErrorCode.JOIN_ROOM_CHECK_CODE);
-        }
         Post postRoom = postRepository.findByChatRoomId(chatroom.get().getId());
 
         //post 성별 조건
@@ -52,34 +49,55 @@ public class MemberRoomService {
         //member의 나이
         String memberAge = userDetails.getMember().getAge();
 
-        int ageMin = Integer.parseInt(age.split("~")[0].split("대")[0]);
-        int ageMax = Integer.parseInt(age.split("~")[1].split("대")[0]);
-        int memberAgeInt = Integer.parseInt(memberAge.split("~")[0].split("대")[0]);
-        int setAge = 0;
 
-        //성별 조건
-        if (postGender.equals("모든성별")){
-            return joinRoom(member, chatroom, memberRoom1, postRoom);
+        if (chatroom.isEmpty()){
+            throw new CustomException(ErrorCode.JOIN_ROOM_CHECK_CODE);
+        }
+        if(member.getPostState() == null) {
+            if (chatroom.get().getMaxPeople() > chatroom.get().getCurrentPeople()) {
+                MemberRoom memberRoom = new MemberRoom(member, chatroom.get());
+                memberRoomRepository.save(memberRoom);
+                chatroom.get().updateCurrentPeople();
+            } else {
+                throw new CustomException(ErrorCode.JOIN_PULL_CHECK_CODE);
+            }
+            if (memberRoom1.isPresent()) {
+                throw new CustomException(ErrorCode.JOIN_CHECK_CODE);
+            }
+            //-----------------------------------------------------------------
+            if (age.equals("모든나이")) {
+                return genderCheck(member, postRoom, postGender, memberGender);
+            }
+
+            int ageOne = Integer.parseInt(age.split("~")[0].split("대")[0]);
+            int ageTwo = Integer.parseInt(age.split("~")[1].split("대")[0]);
+            int memberAgeInt = Integer.parseInt(memberAge.split("~")[0].split("대")[0]);
+            int ageMax = Math.max(ageOne, ageTwo);
+            int ageMin = Math.min(ageOne, ageTwo);
+
+            //나이 순서 정렬
+            if (memberAgeInt <= ageMax && memberAgeInt >= ageMin){
+                return genderCheck(member, postRoom, postGender, memberGender);
+            }else {
+                throw new CustomException(ErrorCode.JOIN_AGE_CHECK_CODE);
+            }
+        } else {
+            throw new CustomException(ErrorCode.JOIN_CHATROOM_CHECK_CODE);
+        }
+    }
+
+    private ResponseEntity<String> genderCheck(Member member, Post postRoom, String postGender, String memberGender) {
+        if(postGender.equals("모든성별")){
+            //참가자 state 값 변화.
+            member.setPostState(postRoom.getTitle());
+            userRepository.save(member);
+            return new ResponseEntity<>("모임에 참여하셨습니다.", HttpStatus.valueOf(200));
         }else if (postGender.equals(memberGender)) {
-            return joinRoom(member, chatroom, memberRoom1, postRoom);
-        }
-        if (!postGender.equals(memberGender)){
-            throw new CustomException(ErrorCode.JOIN_GENDER_CHECK_CODE);
-        }
-        //나이 조건
-        if (age.equals("모든나이")) {
-            return joinRoom(member, chatroom, memberRoom1, postRoom);
-        }
-        //나이 재 정렬
-        else if (ageMin > ageMax) {
-            setAge = ageMin;
-            ageMin = ageMax;
-            ageMax = setAge;
-        }
-        if (memberAgeInt <= ageMax && memberAgeInt >= ageMin){
-            return joinRoom(member, chatroom, memberRoom1, postRoom);
+            member.setPostState(postRoom.getTitle());
+            userRepository.save(member);
+            return new ResponseEntity<>("모임에 참여하셨습니다.", HttpStatus.valueOf(200));
         }else {
-            throw new CustomException(ErrorCode.JOIN_AGE_CHECK_CODE);
+            throw new CustomException(ErrorCode.JOIN_GENDER_CHECK_CODE);
         }
     }
 
