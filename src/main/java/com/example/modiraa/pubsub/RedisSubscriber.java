@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -26,16 +24,7 @@ public class RedisSubscriber {
         try {
             ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
 
-            messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getRoomId(),
-                    ChatMessageResponseDto.builder()
-                            .type(chatMessage.getType())
-                            .roomId(chatMessage.getRoomId())
-                            .senderId(chatMessage.getSender().getId())
-                            .sender(chatMessage.getSender().getNickname())
-                            .profileImage(chatMessage.getSender().getProfileImage())
-                            .message(chatMessage.getMessage())
-                            .userCount(chatMessage.getUserCount())
-                            .build());
+            messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getRoomId(), getPayload(chatMessage));
 
             ChatMessage message = new ChatMessage();
             message.setType(chatMessage.getType());
@@ -48,5 +37,17 @@ public class RedisSubscriber {
         } catch (Exception e) {
             log.error("Exception {}", e);
         }
+    }
+
+    private ChatMessageResponseDto getPayload(ChatMessage chatMessage) {
+        return ChatMessageResponseDto.builder()
+                .type(chatMessage.getType())
+                .roomId(chatMessage.getRoomId())
+                .senderId(chatMessage.getSender().getId())
+                .sender(chatMessage.getSender().getNickname())
+                .profileImage(chatMessage.getSender().getProfileImage())
+                .message(chatMessage.getMessage())
+                .userCount(chatMessage.getUserCount())
+                .build();
     }
 }
