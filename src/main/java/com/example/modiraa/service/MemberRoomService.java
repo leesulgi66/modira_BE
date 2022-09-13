@@ -38,6 +38,18 @@ public class MemberRoomService {
         Member member = userDetails.getMember();
         Optional<ChatRoom> chatroom = chatRoomRepository.findByRoomId(roomId);
         Optional<MemberRoom> memberRoom1 = memberRoomRepository.findByChatRoomAndMember(chatroom,member);
+        Post postRoom = postRepository.findByChatRoomId(chatroom.get().getId());
+
+        //post 성별 조건
+        String postGender = postRoom.getGender();
+        //member의 성별
+        String memberGender = member.getGender();
+        //post 나이 조건
+        String age = postRoom.getAge();
+        //member의 나이
+        String memberAge = userDetails.getMember().getAge();
+
+
         if (chatroom.isEmpty()){
             throw new CustomException(ErrorCode.JOIN_ROOM_CHECK_CODE);
         }
@@ -52,16 +64,41 @@ public class MemberRoomService {
             if (memberRoom1.isPresent()) {
                 throw new CustomException(ErrorCode.JOIN_CHECK_CODE);
             }
+            //-----------------------------------------------------------------
+            if (age.equals("모든나이")) {
+                return genderCheck(member, postRoom, postGender, memberGender);
+            }
 
-            //참가자 state 값 변화.
-            Post postRoom = postRepository.findByChatRoomId(chatroom.get().getId());
-            member.setPostState(postRoom.getTitle());
-            userRepository.save(member);
+            int ageOne = Integer.parseInt(age.split("~")[0].split("대")[0]);
+            int ageTwo = Integer.parseInt(age.split("~")[1].split("대")[0]);
+            int memberAgeInt = Integer.parseInt(memberAge.split("~")[0].split("대")[0]);
+            int ageMax = Math.max(ageOne, ageTwo);
+            int ageMin = Math.min(ageOne, ageTwo);
+
+            //나이 순서 정렬
+            if (memberAgeInt <= ageMax && memberAgeInt >= ageMin){
+                return genderCheck(member, postRoom, postGender, memberGender);
+            }else {
+                throw new CustomException(ErrorCode.JOIN_AGE_CHECK_CODE);
+            }
         } else {
             throw new CustomException(ErrorCode.JOIN_CHATROOM_CHECK_CODE);
         }
+    }
 
-        return new ResponseEntity<>("모임에 참여하셨습니다.", HttpStatus.valueOf(200));
+    private ResponseEntity<String> genderCheck(Member member, Post postRoom, String postGender, String memberGender) {
+        if(postGender.equals("모든성별")){
+            //참가자 state 값 변화.
+            member.setPostState(postRoom.getTitle());
+            userRepository.save(member);
+            return new ResponseEntity<>("모임에 참여하셨습니다.", HttpStatus.valueOf(200));
+        }else if (postGender.equals(memberGender)) {
+            member.setPostState(postRoom.getTitle());
+            userRepository.save(member);
+            return new ResponseEntity<>("모임에 참여하셨습니다.", HttpStatus.valueOf(200));
+        }else {
+            throw new CustomException(ErrorCode.JOIN_GENDER_CHECK_CODE);
+        }
     }
 
     //모임 완료하기
