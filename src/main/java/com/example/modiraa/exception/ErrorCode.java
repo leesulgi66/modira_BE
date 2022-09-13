@@ -16,8 +16,8 @@ public enum ErrorCode {
     JOIN_PULL_CHECK_CODE(400, "C007", "모임 인원이 마감 되었습니다."),
     JOIN_ROOM_CHECK_CODE(400, "C008", "존재하는 모임이 없습니다."),
     JOIN_CHATROOM_CHECK_CODE(400, "C009", "참여중인 모임이 있습니다."),
-    JOIN_AGE_CHECK_CODE(400, "C010", "나이가 제한된 모임 입니다."),
-    JOIN_GENDER_CHECK_CODE(400, "C011", "성별이 제한된 모임 입니다.");
+    JOIN_AGE_CHECK_CODE(400, "C010", "나이 조건이 맞지 않습니다."),
+    JOIN_GENDER_CHECK_CODE(400, "C011", "성별 조건이 맞지 않습니다.");
 
 
     private final int status;

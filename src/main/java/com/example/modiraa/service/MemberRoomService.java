@@ -101,6 +101,7 @@ public class MemberRoomService {
         }
     }
 
+
     //모임 완료하기
     public ResponseEntity<?> leaveRoom(UserDetailsImpl userDetails, String roomId) {
         Member member = userDetails.getMember();
@@ -153,5 +154,31 @@ public class MemberRoomService {
         }
         return memberRoomRepository.RoomUserList(chatroom.get());
     }
+
+
+    //룸 참가
+    private ResponseEntity<String> joinRoom(Member member, Optional<ChatRoom> chatroom, Optional<MemberRoom> memberRoom1, Post postRoom) {
+        if(member.getPostState() == null) {
+            if (chatroom.get().getMaxPeople() > chatroom.get().getCurrentPeople()) {
+                MemberRoom memberRoom = new MemberRoom(member, chatroom.get());
+                memberRoomRepository.save(memberRoom);
+                chatroom.get().updateCurrentPeople();
+            } else {
+                throw new CustomException(ErrorCode.JOIN_PULL_CHECK_CODE);
+            }
+            if (memberRoom1.isPresent()) {
+                throw new CustomException(ErrorCode.JOIN_CHECK_CODE);
+            }
+
+            //참가자 state 값 변화.
+            member.setPostState(postRoom.getTitle());
+            userRepository.save(member);
+        } else {
+            throw new CustomException(ErrorCode.JOIN_CHATROOM_CHECK_CODE);
+        }
+
+        return new ResponseEntity<>("모임에 참여하셨습니다.", HttpStatus.valueOf(200));
+    }
+
 
 }
