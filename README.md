@@ -5,7 +5,8 @@
 # 모디라 Modira
   → **경상도 사투리 로서 [모여라] 혹은 [뭉쳐라]입니다.**
   
-<img width="525" alt="modira banner" src="https://user-images.githubusercontent.com/107823688/189798555-cf0cef39-f03f-4fca-8845-aff6ccfd5647.png">
+<img width="1020" alt="modira banner" src="https://user-images.githubusercontent.com/107676736/190065018-c3c8a52c-d405-4c64-883e-b61f48d3cf29.png">
+<!-- <img width="525" alt="modira banner" src="https://user-images.githubusercontent.com/107823688/189798555-cf0cef39-f03f-4fca-8845-aff6ccfd5647.png"> -->
 
 ## 프로젝트 개요
 혼밥하지 마세요! 새로운 만남! '모디라' 를 이용하세요
