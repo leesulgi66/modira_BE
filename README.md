@@ -79,7 +79,9 @@
   
   
 ## 서비스 아키텍처 
-![아키텍처 1](https://user-images.githubusercontent.com/106013448/189812861-e485d51f-7124-41c2-8b4c-983cbe51f6f8.PNG)
+<!-- ![아키텍처 1](https://user-images.githubusercontent.com/106013448/189812861-e485d51f-7124-41c2-8b4c-983cbe51f6f8.PNG) -->
+![아키텍처](https://user-images.githubusercontent.com/107676736/190206885-2f698bff-e07b-4fa3-9165-f5fb3f6b24a0.png)
+
 
 <br>
 
