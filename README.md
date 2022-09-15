@@ -63,7 +63,7 @@
 #### 🔗 link
 - [Modira service](http://modira.co.kr/)
 - [시연영상]()
-- [Team notion](https://www.notion.so/e8043aedb4824cd2a9b8d15223a5435d)
+- [Team notion](https://sturdy-kangaroo-6bc.notion.site/e8043aedb4824cd2a9b8d15223a5435d)
 - [Github Back-End repo](https://github.com/modiraa/modira_BE)
 - [Github Front-End repo](https://github.com/modiraa/modira_FE)
 
