@@ -62,19 +62,19 @@ public class StompHandler implements ChannelInterceptor {
 
             Long memberId = member.getId();
 
-            if (!Objects.equals(chatRoomService.getUserEnterRoom(memberId), roomId)) {
-                chatRoomService.setUserEnterInfo(sessionId, memberId, roomId);
 
-                // 채팅방의 인원수를 +1한다.
-                chatRoomService.plusUserCount(roomId);
+            chatRoomService.setUserEnterInfo(sessionId, memberId, roomId);
 
-                // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
-                chatMessageService.sendChatMessage(ChatMessage.builder()
-                        .type(ChatMessage.MessageType.ENTER)
-                        .roomId(roomId)
-                        .sender(member)
-                        .build());
-            }
+            // 채팅방의 인원수를 +1한다.
+            chatRoomService.plusUserCount(roomId);
+
+            // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
+            chatMessageService.sendChatMessage(ChatMessage.builder()
+                    .type(ChatMessage.MessageType.ENTER)
+                    .roomId(roomId)
+                    .sender(member)
+                    .build());
+
 
             log.info("SUBSCRIBED {}, {}, {}", sessionId, member.getNickname(), roomId);
 
