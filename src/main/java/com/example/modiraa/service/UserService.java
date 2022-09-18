@@ -33,6 +33,7 @@ public class UserService {
         String username = requestDto.getUsername();
         String password = requestDto.getUsername()+"1234";
         String profileImage = requestDto.getUserProfile();
+        String kakaoImage = requestDto.getKakaoImage();
         MultipartFile setProfileImage = requestDto.getUserProfileImage();
         String nickname = requestDto.getNickname();
         String age = requestDto.getAge();
@@ -74,7 +75,8 @@ public class UserService {
             String profileUrl = s3Uploader.upload(requestDto.getUserProfileImage(), "profile");
             member.setProfileImage(profileUrl);
         } else {
-            throw new CustomException(ErrorCode.IMAGE_CHECK_CODE);
+            String profileUrl = kakaoImage;
+            member.setProfileImage(profileUrl);
         }
 
         userRepository.save(member);

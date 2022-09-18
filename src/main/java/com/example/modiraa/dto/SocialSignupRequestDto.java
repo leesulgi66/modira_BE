@@ -10,6 +10,7 @@ public class SocialSignupRequestDto {
     private String kakaoNickname;
     private String password;
     private String userProfile;
+    private String kakaoImage;
     private MultipartFile userProfileImage;
     private String age;
     private String gender;
