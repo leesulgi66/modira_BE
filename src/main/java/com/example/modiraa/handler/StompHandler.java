@@ -31,6 +31,7 @@ public class StompHandler implements ChannelInterceptor {
 
 
     @Override
+    // 클라이언트가 메세지를 발송하면 최초에 해당 메세지를 인터셉트하여 처리함
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
@@ -79,11 +80,11 @@ public class StompHandler implements ChannelInterceptor {
             log.info("SUBSCRIBED {}, {}, {}", sessionId, member.getNickname(), roomId);
 
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
-
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             String roomId = chatRoomService.getUserEnterRoomId(sessionId);
 
+            // 저장했던 sessionId 로 유저 객체를 받아옴
             Member member = chatRoomService.checkSessionUser(sessionId);
 
             // 채팅방의 인원수를 -1한다.
