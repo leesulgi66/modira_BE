@@ -36,16 +36,11 @@ public class ChatRoomService {
     }
 
     // redis 에 저장했던 sessionId 로 roomId를 리턴함
-    public String getUserEnterRoom(Long memberId) {
-        return hashOpsEnterInfo.get(ENTER_INFO, Long.toString(memberId));
-    }
-
-    // memberId로 입장해 있는 채팅방 ID 조회
     public String getUserEnterRoomId(String memberId) {
         return hashOpsEnterInfo.get(ENTER_INFO, memberId);
     }
 
-    // redis 에 저장했던 sessionId 로 userId 를 얻어오고 해당 userId 로 User 객체를 찾아 리턴함
+    // redis 에 저장했던 sessionId 로 userId 를 얻어오고 해당 userId 로 Member 객체를 찾아 리턴함
     public Member checkSessionUser(String sessionId) {
         Long memberId = Long.parseLong(Objects.requireNonNull(hashOpsUserInfo.get(USER_INFO, sessionId)));
         return userRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
