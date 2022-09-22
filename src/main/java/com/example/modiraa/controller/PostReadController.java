@@ -35,7 +35,7 @@ public class PostReadController {
         return ResponseEntity.status(HttpStatus.OK).body(posts);
     }
 
-    // 카테코리별 모임 더보기
+    // 카테고리별 모임 더보기
     @GetMapping("/api/post")
     public ResponseEntity<Slice<PostsResponseDto>> getPosts(@RequestParam(value = "category", defaultValue = "") String category,
                                                             @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 8) Pageable pageable,
@@ -44,7 +44,7 @@ public class PostReadController {
         return ResponseEntity.status(HttpStatus.OK).body(posts);
     }
 
-    // 메인 페이지 카테코리별 모임
+    // 메인 페이지 카테고리별 모임
     @GetMapping("/api/post/list")
     public ResponseEntity<PostListDto> getPostList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         PostListDto postList;
