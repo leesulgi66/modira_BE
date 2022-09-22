@@ -15,7 +15,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByIdLessThanAndCategoryContains(Long lastId, String category, Pageable pageable);
 
-    Page<Post> findAllByCategoryContains(String category, Pageable pageable);
+    Page<Post> findAllByCategory(String category, Pageable pageable);
 
     Page<Post> findAllByAddressContaining(String address, Pageable pageable);
     Page<Post> findAllByAddressContainingAndCategory(String address, String category, Pageable pageable);

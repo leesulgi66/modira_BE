@@ -57,14 +57,14 @@ public class PostReadService {
         return postResponseDto(posts);
     }
 
-    // 메인 페이지 카테코리별 모임
+    // 메인 페이지 카테고리별 모임
     public PostListDto showPostList() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(0, 8, sort);
 
         Page<Post> postAll = postRepository.findAll(pageable);
-        Page<Post> postGoldenBell = postRepository.findAllByCategoryContains("골든벨", pageable);
-        Page<Post> postDutchPay = postRepository.findAllByCategoryContains("N빵", pageable);
+        Page<Post> postGoldenBell = postRepository.findAllByCategory("방장이 쏜다! 골든벨", pageable);
+        Page<Post> postDutchPay = postRepository.findAllByCategory("다같이 내자! N빵", pageable);
 
         PostListDto postListDto = new PostListDto();
 
@@ -75,7 +75,7 @@ public class PostReadService {
         return postListDto;
     }
 
-    // 메인 페이지 카테코리별 모임
+    // 메인 페이지 카테고리별 모임
     public PostListDto showPostListMember(UserDetailsImpl userDetails) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(0, 8, sort);
