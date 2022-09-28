@@ -36,7 +36,7 @@ public class ChatMessage {
     private String message; // 메시지
 
     @Column
-    private long userCount; // 채팅방 인원수, 채팅방 내에서 메시지가 전달될때 인원수 갱신시 사용
+    private long userCount; // 채팅방 인원수
 
     @Builder
     public ChatMessage(MessageType type, String roomId, Member sender, String message, long userCount) {
