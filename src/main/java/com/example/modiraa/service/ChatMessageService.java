@@ -47,7 +47,7 @@ public class ChatMessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
 
-    // 채팅방의 마지막 150개 메세지를 페이징하여 리턴함
+    // 채팅방의 마지막 150개 메세지를 페이징하여 리턴
     public Page<ChatMessageResponseDto> getChatMessageByRoomId(String roomId, Pageable pageable) {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         Sort sort = Sort.by(Sort.Direction.DESC, "id" );
