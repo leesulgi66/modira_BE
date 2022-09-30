@@ -18,7 +18,7 @@ public class ChatMessageController {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final ChatMessageService chatMessageService;
 
-    // websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
+    // websocket "/pub/chat/message"로 들어오는 메시징을 처리
     @MessageMapping("/chat/message")
     public void message(@RequestBody ChatMessageRequestDto messageRequestDto, @Header("Authorization") String token) {
         Member member = jwtAuthorizationFilter.getMemberFromJwt(token);
