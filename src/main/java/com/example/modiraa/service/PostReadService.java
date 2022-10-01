@@ -4,10 +4,7 @@ import com.example.modiraa.auth.UserDetailsImpl;
 import com.example.modiraa.dto.*;
 import com.example.modiraa.model.Member;
 import com.example.modiraa.model.Post;
-import com.example.modiraa.repository.HatesRepository;
-import com.example.modiraa.repository.LikesRepository;
-import com.example.modiraa.repository.MemberRoomRepository;
-import com.example.modiraa.repository.PostRepository;
+import com.example.modiraa.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +22,7 @@ public class PostReadService {
     private final PostRepository postRepository;
     private final LikesRepository likesRepository;
     private final HatesRepository hatesRepository;
+    private final PostQueryRepository postQueryRepository;
 
     private final MemberRoomRepository memberRoomRepository;
 
@@ -35,7 +33,7 @@ public class PostReadService {
         log.info("pageable -> {}", pageable);
         log.info("lastId -> {}", lastId);
 
-        Page<Post> posts = postRepository.selectPost(lastId, address, keyword, pageable);
+        Page<Post> posts = postQueryRepository.findBySearchKeywordAndAddress(lastId, address, keyword, pageable);
 
         log.info("result=> {}", posts);
         log.info("result=> {}", posts.getContent());
