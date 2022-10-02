@@ -47,7 +47,7 @@ public class PostReadService {
         log.info("category -> {}", category);
         log.info("lastId -> {}", lastId);
 
-        Page<Post> posts = postQueryRepository.findByCategory(lastId, category, pageable);
+        Page<Post> posts = postQueryRepository.findByIdLessThanAndCategory(lastId, category, pageable);
 
         log.info("result=> {}", posts);
         log.info("result=> {}", posts.getContent());
@@ -60,9 +60,9 @@ public class PostReadService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(0, 8, sort);
 
-        Page<Post> postAll = postRepository.findAll(pageable);
-        Page<Post> postGoldenBell = postRepository.findAllByCategory("방장이 쏜다! 골든벨", pageable);
-        Page<Post> postDutchPay = postRepository.findAllByCategory("다같이 내자! N빵", pageable);
+        Page<Post> postAll = postQueryRepository.findAll(pageable);
+        Page<Post> postGoldenBell = postQueryRepository.findByCategory("방장이 쏜다! 골든벨", pageable);
+        Page<Post> postDutchPay = postQueryRepository.findByCategory("다같이 내자! N빵", pageable);
 
         PostListDto postListDto = new PostListDto();
 
@@ -73,7 +73,7 @@ public class PostReadService {
         return postListDto;
     }
 
-    // 메인 페이지 카테고리별 모임
+    // 로그인 후 메인 페이지 카테고리별 모임
     public PostListDto showPostListMember(UserDetailsImpl userDetails) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(0, 8, sort);
