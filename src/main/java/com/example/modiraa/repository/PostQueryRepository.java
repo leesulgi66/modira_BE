@@ -31,4 +31,18 @@ public class PostQueryRepository {
                 .fetchResults();
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
+
+    public Page<Post> findByCategory(Long lastId, String category, Pageable pageable) {
+        QueryResults<Post> result = queryFactory.selectFrom(post)
+                .where(post.id.lt(lastId).and(post.category.contains(category)))
+                .join(post.member)
+                .join(post.postImage)
+                .join(post.chatRoom)
+                .fetchJoin()
+                .orderBy(post.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
 }
