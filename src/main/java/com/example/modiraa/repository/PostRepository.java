@@ -22,13 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Post findByChatRoomId(Long chatRoomId);
 
-    @Query(value = "SELECT * FROM Post WHERE id < :lastId AND address LIKE :address% AND (menu LIKE %:keyword% OR title LIKE %:keyword% OR contents LIKE %:keyword% )",
-            nativeQuery = true)
-    Page<Post> selectPost(@Param("lastId") Long lastId,
-                          @Param("address") String address,
-                          @Param("keyword") String keyword,
-                          Pageable pageable);
-
 
     // 내가 작성한 모임 조회
    @Query("SELECT new com.example.modiraa.dto.myPostsResponseDto(p.id, p.title, PI.imageurl, p.menu)" +
