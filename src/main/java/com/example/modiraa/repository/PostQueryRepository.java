@@ -31,4 +31,74 @@ public class PostQueryRepository {
                 .fetchResults();
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
+
+    public Page<Post> findByIdLessThanAndCategory(Long lastId, String category, Pageable pageable) {
+        QueryResults<Post> result = queryFactory.selectFrom(post)
+                .where(post.id.lt(lastId).and(post.category.contains(category)))
+                .join(post.member)
+                .join(post.postImage)
+                .join(post.chatRoom)
+                .fetchJoin()
+                .orderBy(post.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
+
+    public Page<Post> findAll(Pageable pageable) {
+        QueryResults<Post> result = queryFactory.selectFrom(post)
+                .join(post.member)
+                .join(post.postImage)
+                .join(post.chatRoom)
+                .fetchJoin()
+                .orderBy(post.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
+
+    public Page<Post> findByCategory(String category, Pageable pageable) {
+        QueryResults<Post> result = queryFactory.selectFrom(post)
+                .where(post.category.contains(category))
+                .join(post.member)
+                .join(post.postImage)
+                .join(post.chatRoom)
+                .fetchJoin()
+                .orderBy(post.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
+
+    public Page<Post> findAllByAddress(String address, Pageable pageable) {
+        QueryResults<Post> result = queryFactory.selectFrom(post)
+                .where(post.address.contains(address))
+                .join(post.member)
+                .join(post.postImage)
+                .join(post.chatRoom)
+                .fetchJoin()
+                .orderBy(post.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
+
+    public Page<Post> findByAddressAndCategory(String address, String category, Pageable pageable) {
+        QueryResults<Post> result = queryFactory.selectFrom(post)
+                .where(post.address.contains(address).and(post.category.contains(category)))
+                .join(post.member)
+                .join(post.postImage)
+                .join(post.chatRoom)
+                .fetchJoin()
+                .orderBy(post.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
+
 }

@@ -63,7 +63,7 @@ public class Post {
     @Column(nullable = false)
     private String age;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 
