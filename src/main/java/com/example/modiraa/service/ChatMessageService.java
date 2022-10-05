@@ -2,7 +2,7 @@ package com.example.modiraa.service;
 
 import com.example.modiraa.dto.ChatMessageResponseDto;
 import com.example.modiraa.model.ChatMessage;
-import com.example.modiraa.repository.ChatMessageRepository;
+import com.example.modiraa.repository.ChatMessageQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public class ChatMessageService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final ChatRoomService chatRoomService;
-    private final ChatMessageRepository chatMessageRepository;
+    private final ChatMessageQueryRepository chatMessageQueryRepository;
 
     // destination정보에서 roomId 추출
     public String getRoomId(String destination) {
@@ -52,7 +52,7 @@ public class ChatMessageService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         Sort sort = Sort.by(Sort.Direction.DESC, "id" );
         pageable = PageRequest.of(page, 150, sort );
-        Page<ChatMessage> chatMessages = chatMessageRepository.findByRoomIdOrderByIdDesc(roomId, pageable);
+        Page<ChatMessage> chatMessages = chatMessageQueryRepository.findByRoomIdOrderByIdDesc(roomId, pageable);
 
         return chatResponseDto(chatMessages);
     }
