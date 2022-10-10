@@ -9,6 +9,7 @@ import com.example.modiraa.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Service
 @RequiredArgsConstructor
-
+@Slf4j
 public class KakaoService {
 
     private final PasswordEncoder passwordEncoder;
@@ -36,7 +37,8 @@ public class KakaoService {
 
 
     //카카오 사용자 로그인요청
-    public SocialResponseDto requestKakao(String code, HttpServletResponse response) {
+    public SocialResponseDto requestKakao(String redirectUri, String code, HttpServletResponse response) {
+        log.info("redirectUri{} ", redirectUri);
         //REstTemplate을 이용해 POST방식으로 Key=value 데이터를 요청 (카카오쪽으로)
         RestTemplate rt = new RestTemplate();
 
@@ -48,10 +50,17 @@ public class KakaoService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         // 실제 코드를 쓸 시 아래의 값들을 변수화 해서 쓰는 것이 더 좋다.
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "ddb938f8fed6079e90564fca875e2903");
-//        params.add("client_id", "811b32c1569bba53dd9f8984c4dd9ac3");
-        params.add("redirect_uri", "http://localhost:3000/auth/kakao/callback");
-//        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
+        if(redirectUri.equals("3000")){
+            params.add("client_id", "ddb938f8fed6079e90564fca875e2903");
+            params.add("redirect_uri", "http://localhost:3000/auth/kakao/callback");
+        }
+        else if (redirectUri.equals("modira")){
+            params.add("client_id", "ddb938f8fed6079e90564fca875e2903");
+            params.add("redirect_uri", "http://modira.co.kr/auth/kakao/callback");
+        } else if (redirectUri.isEmpty()){
+            params.add("client_id", "811b32c1569bba53dd9f8984c4dd9ac3");
+            params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
+        }
         params.add("code", code);
 
         //HttpHeader와 HttpBdoy를 하나의 오브젝트에 담기

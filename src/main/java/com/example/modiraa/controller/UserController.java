@@ -48,8 +48,8 @@ public class UserController {
 
     //카카오 소셜 로그인
     @GetMapping("/auth/kakao/callback")
-    public @ResponseBody SocialResponseDto kakaoCalback(String code, HttpServletResponse response) {      //ResponseBody -> Data를 리턴해주는 컨트롤러 함수
-        return kakaoService.requestKakao(code, response);
+    public @ResponseBody SocialResponseDto kakaoCalback(@RequestParam(value = "redirectUri", defaultValue = "")String redirectUri, String code, HttpServletResponse response) {      //ResponseBody -> Data를 리턴해주는 컨트롤러 함수
+        return kakaoService.requestKakao(redirectUri, code, response);
     }
 
     //네이버 소셜 로그인
