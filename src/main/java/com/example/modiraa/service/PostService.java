@@ -26,6 +26,7 @@ public class PostService {
     private final PostImageRepository postImageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRoomRepository memberRoomRepository;
+    private final MemberRoomQueryRepository memberRoomQueryRepository;
 
     // 모임 생성
     public void createPost(String username, PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
@@ -74,7 +75,7 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
-        List<MemberRoom> memberRoomList = memberRoomRepository.findByChatRoomId(post.getChatRoom().getId());
+        List<MemberRoom> memberRoomList = memberRoomQueryRepository.findByChatRoomId(post.getChatRoom().getId());
 
         for (MemberRoom memberRoom : memberRoomList){
             memberRoomRepository.deleteById(memberRoom.getId());
