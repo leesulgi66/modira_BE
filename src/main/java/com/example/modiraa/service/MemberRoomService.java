@@ -8,10 +8,7 @@ import com.example.modiraa.model.ChatRoom;
 import com.example.modiraa.model.Member;
 import com.example.modiraa.model.MemberRoom;
 import com.example.modiraa.model.Post;
-import com.example.modiraa.repository.ChatRoomRepository;
-import com.example.modiraa.repository.MemberRoomRepository;
-import com.example.modiraa.repository.PostRepository;
-import com.example.modiraa.repository.UserRepository;
+import com.example.modiraa.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberRoomService {
 
+    private final MemberRoomQueryRepository memberRoomQueryRepository;
     private final MemberRoomRepository memberRoomRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
@@ -113,7 +111,7 @@ public class MemberRoomService {
 
         Long chatroomId = chatroom.get().getId();
 
-        MemberRoom memberRoom  = memberRoomRepository.findByChatRoomIdAndMember_Id(chatroomId, member.getId()).orElseThrow(
+        MemberRoom memberRoom  = memberRoomQueryRepository.findByChatRoomIdAndMemberId(chatroomId, member.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.JOIN_ROOM_CHECK_CODE)
         );
 

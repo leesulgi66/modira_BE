@@ -35,4 +35,13 @@ public class MemberRoomQueryRepository {
                 .fetchFirst());
     }
 
+    public Optional<MemberRoom> findByChatRoomIdAndMemberId(Long chatroomID, Long memberID){
+        return Optional.ofNullable(queryFactory.selectFrom(memberRoom)
+                .where(memberRoom.member.id.eq(memberID).and(memberRoom.chatRoom.id.eq(chatroomID)))
+                .join(memberRoom.member)
+                .join(memberRoom.chatRoom)
+                .fetchJoin()
+                .fetchOne());
+    }
+
 }
