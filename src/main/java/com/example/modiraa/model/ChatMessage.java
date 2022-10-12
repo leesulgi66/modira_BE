@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class ChatMessage extends Timestamped {
 
     // 메시지 타입 : 입장, 채팅, 퇴장
     public enum MessageType {
@@ -25,18 +25,22 @@ public class ChatMessage {
     @Enumerated(value = EnumType.STRING)
     private MessageType type;
 
+    // 채팅방 번호
     @Column
-    private String roomId; // 방번호
+    private String roomId;
 
+    // 메시지 보낸사람
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member sender; // 메시지 보낸사람
+    private Member sender;
 
+    // 메시지
     @Column(length = 100000)
-    private String message; // 메시지
+    private String message;
 
+    // 채팅방 인원수
     @Column
-    private long userCount; // 채팅방 인원수
+    private long userCount;
 
     @Builder
     public ChatMessage(MessageType type, String roomId, Member sender, String message, long userCount) {
