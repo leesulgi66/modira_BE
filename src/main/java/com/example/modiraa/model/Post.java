@@ -15,7 +15,7 @@ public class Post {
     @Id
     private Long id;
 
-    //카테고리 이름
+    //음식 카테고리
     @Column(nullable = false)
     private String category;
 
