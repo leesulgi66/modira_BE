@@ -1,13 +1,14 @@
 package com.example.modiraa.service;
 
-import com.example.modiraa.dto.MyUserProfileResponseDto;
-import com.example.modiraa.model.ChatRoom;
-import com.example.modiraa.model.MemberRoom;
-import com.example.modiraa.model.Post;
-import com.example.modiraa.repository.*;
 import com.example.modiraa.auth.UserDetailsImpl;
-import com.example.modiraa.model.Member;
+import com.example.modiraa.dto.MyUserProfileResponseDto;
 import com.example.modiraa.dto.UserProfileResponseDto;
+import com.example.modiraa.model.Member;
+import com.example.modiraa.model.MemberRoom;
+import com.example.modiraa.repository.HatesRepository;
+import com.example.modiraa.repository.LikesRepository;
+import com.example.modiraa.repository.MemberRoomQueryRepository;
+import com.example.modiraa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,9 @@ public class MyPageService {
     private final UserRepository userRepository;
     private final LikesRepository likesRepository;
     private final HatesRepository hatesRepository;
-    private final MemberRoomRepository memberRoomRepository;
+    private final MemberRoomQueryRepository memberRoomQueryRepository;
 
-// 유저 프로필 조회
+    // 유저 프로필 조회
     public UserProfileResponseDto getProfile(Long id) throws IllegalAccessException {
 
         Member member = userRepository.findById(id)
@@ -50,7 +51,7 @@ public class MyPageService {
 
         String roomId = null;
 
-        Optional<MemberRoom> memberRoom = memberRoomRepository.findTopByMemberOrderByIdDesc(member);
+        Optional<MemberRoom> memberRoom = memberRoomQueryRepository.findTopByMemberOrderByIdDesc(member);
         if(memberRoom.isPresent()) {
              roomId = memberRoom.get().getChatRoom().getRoomId();
         }
